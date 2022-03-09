@@ -11,6 +11,8 @@ namespace TeamsInMongo.Data
         public List<IUser> Users { get; set; }
 
         public void AddUser(IUser user);
-        public void RemoveUser(IUser user);
+        public void RemoveUser(IUser user); 
+        public event Action OnTeamItemChange;
+
     }
 }

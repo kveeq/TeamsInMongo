@@ -23,6 +23,8 @@ namespace TeamsInMongo.Data
             Users.Add(user);
         }
 
+        public event Action OnTeamItemChange;
+
         public void RemoveUser(IUser user)
         {
             Users.Remove(user);

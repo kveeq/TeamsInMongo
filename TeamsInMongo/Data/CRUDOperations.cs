@@ -8,6 +8,7 @@ namespace TeamsInMongo.Data
         readonly static string userCollectionName = "Users";
         readonly static string teamCollectionName = "teams";
         public static IUser ChooseUserForTeam;
+        public static ITeam ChooseTeam;
 
         public static async void AddUser(User user)
         {
@@ -23,6 +24,14 @@ namespace TeamsInMongo.Data
             var db = client.GetDatabase(databaseName);
             var collection = db.GetCollection<Team>(teamCollectionName);
             await collection.InsertOneAsync(team);
+        } 
+        public async static void UpdateTeam(Team team)
+        {
+            MongoClient client = new MongoClient(); // чтобы подключится к серверу надо передать в качестве аргумента {uri}
+            var db = client.GetDatabase(databaseName);
+            var collection = db.GetCollection<Team>(teamCollectionName);
+            var UpdateDef = Builders<Team>.Update.Set("Name", team.Name).Set("Users", team.Users);
+            await collection.UpdateOneAsync(basa => basa.Id == team.Id, UpdateDef);
         }
 
         public async static Task<List<User>> TakeUserList()

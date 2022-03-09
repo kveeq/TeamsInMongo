@@ -11,20 +11,49 @@
     <button class="btn btn-outline-success py-2 px-4 mx-5 mb-3" @onclick="RandomTeam">Рандомное заполнение команды</button>
     <button class="btn btn-outline-success py-2 px-4 mx-5 mb-3" @onclick="CreateTeam">Создать</button>
     <button class="btn btn-outline-success py-2 px-4 mx-5 mb-3" @onclick="AddPlayerInTeam"> Добавить игрока</button>
-    <button class="btn btn-outline-success py-2 px-4 mx-5" @onclick="AddPlayerInTeam"> Замена игрока</button>
+    <button class="btn btn-outline-success py-2 px-4 mx-5 mb-lg-5" @onclick="UpdatePlayerInTeam"> Замена игрока</button>
+    <button class="btn btn-outline-success py-2 px-4 mx-5" @onclick="UpdateTeam">Обновление выбранной команды</button>
 </div>
 
 @code {
-    private string Name { get; set; }
+    public static string Name { get; set; }
     private int UserNumber { get; set; }
-    private IUser User1 { get; set; } = new User("No User", "", "");
-    private IUser User2 { get; set; } = new User("No User", "", "");
-    private IUser User3 { get; set; } = new User("No User", "", "");
-    private IUser User4 { get; set; } = new User("No User", "", "");
-    private IUser User5 { get; set; } = new User("No User", "", "");
+    private ITeam Team{ get; set; }
+    public static ITeam ChooseTeam{ get; set; }
+    public static IUser User1 { get; set; } = new User("No User", "", "");
+    public static IUser User2 { get; set; } = new User("No User", "", "");
+    public static IUser User3 { get; set; } = new User("No User", "", "");
+    public static IUser User4 { get; set; } = new User("No User", "", "");
+    public static IUser User5 { get; set; } = new User("No User", "", "");
+    public static event Action OnUserChange;
+
+    protected override void OnInitialized()
+    {
+        OnUserChange += UserChange;
+        base.OnInitialized();
+    }
+
+    private async void UserChange()
+    {
+        await InvokeAsync(StateHasChanged);
+        ChooseTeam = CRUDOperations.ChooseTeam;
+        Team = ChooseTeam;
+    }
+
+    public void UpdateTeam()
+    {
+        
+        CRUDOperations.UpdateTeam((Team)ChooseTeam);
+    }  
+
+    public static void UpdateUsersEvent()
+    {
+        OnUserChange?.Invoke();
+    }
 
     public void RandomTeam()
     {
+
         var users = CRUDOperations.TakeUserList().Result;
         List<User> listusers = users.ToList();
         User1 = new User("No User", "", "");
@@ -91,58 +120,86 @@
             }
             User5 = listusers[a];
         }
+
+        Team = new Team(Name, new List<IUser>() { User1, User2, User3, User4, User5 });
     }
+
     public void CreateTeam()
     {
-        if(CheckFillTeam())
-            CRUDOperations.AddTeam(new Team(Name, new List<IUser>() { User1,User2,User3, User4, User5}));
-
+        if (CheckFillTeam()) { 
+            Team = new Team(Name, new List<IUser>() { User1,User2,User3, User4, User5});
+            CRUDOperations.AddTeam((Team)Team);
+        }
     }    
-    public void AddPlayerInTeam()
+
+    public void UpdatePlayerInTeam()
     {
         switch (UserNumber)
         {
             case 1: 
                 if(Check())
+                {
                     User1 = CRUDOperations.ChooseUserForTeam;
+                    Team.Users = new List<IUser>() { User1, User2, User3, User4, User5 };
+                }
                 break;
             case 2: 
                 if(Check())
+                {
                     User2 = CRUDOperations.ChooseUserForTeam;
+                    Team.Users = new List<IUser>() { User1, User2, User3, User4, User5 };
+                    
+                }
                 break;
             case 3: 
-                if(Check())
+               if(Check())
+                {
                     User3 = CRUDOperations.ChooseUserForTeam;
+                    Team.Users = new List<IUser>() { User1, User2, User3, User4, User5 };
+                    
+                }
                 break;
             case 4: 
-                if(Check())
+                 if(Check())
+                {
                     User4 = CRUDOperations.ChooseUserForTeam;
+                    Team.Users = new List<IUser>() { User1, User2, User3, User4, User5 };
+                    
+                }
                 break;
             case 5: 
-                if(Check())
+                 if(Check())
+                {
                     User5 = CRUDOperations.ChooseUserForTeam;
+                    Team.Users = new List<IUser>() { User1, User2, User3, User4, User5 };
+                    
+                }
                 break;
         }
-        //if(User1.Name == "No User" && Check())
-        //{
-        //    User1 = CRUDOperations.ChooseUserForTeam;
-        //}  
-        //else if(User2.Name == "No User" && Check())
-        //{
-        //    User2 = CRUDOperations.ChooseUserForTeam;
-        //}
-        //else if(User3.Name == "No User" && Check())
-        //{
-        //    User3 = CRUDOperations.ChooseUserForTeam;
-        //}
-        //else if(User4.Name == "No User" && Check())
-        //{
-        //    User4 = CRUDOperations.ChooseUserForTeam;
-        //}
-        //else if(User5.Name == "No User" && Check())
-        //{
-        //    User5 = CRUDOperations.ChooseUserForTeam;
-        //}
+    }
+
+    public void AddPlayerInTeam()
+    {
+        if(User1.Name == "No User" && Check())
+        {
+            User1 = CRUDOperations.ChooseUserForTeam;
+        }  
+        else if(User2.Name == "No User" && Check())
+        {
+            User2 = CRUDOperations.ChooseUserForTeam;
+        }
+        else if(User3.Name == "No User" && Check())
+        {
+            User3 = CRUDOperations.ChooseUserForTeam;
+        }
+        else if(User4.Name == "No User" && Check())
+        {
+            User4 = CRUDOperations.ChooseUserForTeam;
+        }
+        else if(User5.Name == "No User" && Check())
+        {
+            User5 = CRUDOperations.ChooseUserForTeam;
+        }
     }
 
     private bool Check()

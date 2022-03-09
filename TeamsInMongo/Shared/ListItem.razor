@@ -6,7 +6,8 @@
     }
     else
     {
-        <button class="btn list-group-item list-group-item-action">@Team.Name</button>
+        <button class="btn list-group-item list-group-item-action" @onclick="ChooseTeam">@Team.Name</button>
+        
     }
 @code {
     [Parameter]
@@ -16,5 +17,16 @@
     [Parameter]
     public bool state { get; set; }
 
-
+    private async void ChooseTeam()
+    {
+        CRUDOperations.ChooseTeam = Team;
+        TeamCreate.User1 = Team.Users[0];
+        TeamCreate.User2 = Team.Users[1];
+        TeamCreate.User3 = Team.Users[2];
+        TeamCreate.User4 = Team.Users[3];
+        TeamCreate.Name = Team.Name;
+        TeamCreate.User5 = Team.Users[4];
+        TeamCreate.UpdateUsersEvent();
+        StateHasChanged();
+    }
 }
