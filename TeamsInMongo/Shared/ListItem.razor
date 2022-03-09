@@ -1,0 +1,20 @@
+﻿@using TeamsInMongo.Data
+
+    @if(state)
+    {   
+        <button class="btn list-group-item list-group-item-action" @onclick="(()=> CRUDOperations.ChooseUserForTeam = User)">@User.Login @User.Name</button>
+    }
+    else
+    {
+        <button class="btn list-group-item list-group-item-action">@Team.Name</button>
+    }
+@code {
+    [Parameter]
+    public IUser? User { get; set; }
+    [Parameter]
+    public ITeam? Team { get; set; }
+    [Parameter]
+    public bool state { get; set; }
+
+
+}

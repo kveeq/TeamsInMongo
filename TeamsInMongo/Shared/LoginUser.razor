@@ -1,0 +1,20 @@
+﻿@using TeamsInMongo.Data
+
+<h6 class="mt-5">Регистрация новых пользователей</h6>
+<div class="col col-4">
+    <input type="text" placeholder="Имя" class="border input-group-text mb-2" @bind="Name" />
+    <input type="text" placeholder="Логин" class="border input-group-text mb-2" @bind="Login" />
+    <input type="text" placeholder="Email" class="border input-group-text mb-2" @bind="Email" />
+    <button class="btn btn-outline-success py-2 px-4 mx-5" @onclick="Submit">Создать</button>
+</div>
+
+@code {
+    private string Name{ get; set; }
+    private string Login{ get; set; }
+    private string Email{ get; set; }
+
+    public void Submit()
+    {
+        CRUDOperations.AddUser(new User(Name, Login, Email));
+    }
+}

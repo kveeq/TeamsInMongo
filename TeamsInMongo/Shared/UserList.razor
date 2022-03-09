@@ -1,0 +1,20 @@
+﻿@using TeamsInMongo.Data
+
+<h6>Список пользователей</h6>
+<div class="col col-4 list-group">
+    @foreach(var item in Users)
+    {
+        <ListItem User=item state=true></ListItem>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<User> Users { get; set; }
+
+    protected override void OnInitialized()
+    {   
+        Users = CRUDOperations.TakeUserList().Result;
+        base.OnInitialized();
+    }
+}

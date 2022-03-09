@@ -1,0 +1,158 @@
+﻿@using TeamsInMongo.Data
+
+<h3>TeamCreate</h3>
+<div class="col col-4">
+    <input type="text" placeholder="Имя команды" class="border input-group-text mb-2" @bind="Name"/>
+    <input type="text" placeholder="Игрок 1" class="border input-group-text mb-2" @bind="User1.Name" @onclick="(()=>UserNumber = 1)" />
+    <input type="text" placeholder="Игрок 2" class="border input-group-text mb-2" @bind="User2.Name" @onclick="(()=>UserNumber = 2)" />
+    <input type="text" placeholder="Игрок 3" class="border input-group-text mb-2" @bind="User3.Name" @onclick="(()=>UserNumber = 3)" />
+    <input type="text" placeholder="Игрок 4" class="border input-group-text mb-2" @bind="User4.Name" @onclick="(()=>UserNumber = 4)" />
+    <input type="text" placeholder="Игрок 5" class="border input-group-text mb-2" @bind="User5.Name" @onclick="(()=>UserNumber = 5)" />
+    <button class="btn btn-outline-success py-2 px-4 mx-5 mb-3" @onclick="RandomTeam">Рандомное заполнение команды</button>
+    <button class="btn btn-outline-success py-2 px-4 mx-5 mb-3" @onclick="CreateTeam">Создать</button>
+    <button class="btn btn-outline-success py-2 px-4 mx-5 mb-3" @onclick="AddPlayerInTeam"> Добавить игрока</button>
+    <button class="btn btn-outline-success py-2 px-4 mx-5" @onclick="AddPlayerInTeam"> Замена игрока</button>
+</div>
+
+@code {
+    private string Name { get; set; }
+    private int UserNumber { get; set; }
+    private IUser User1 { get; set; } = new User("No User", "", "");
+    private IUser User2 { get; set; } = new User("No User", "", "");
+    private IUser User3 { get; set; } = new User("No User", "", "");
+    private IUser User4 { get; set; } = new User("No User", "", "");
+    private IUser User5 { get; set; } = new User("No User", "", "");
+
+    public void RandomTeam()
+    {
+        var users = CRUDOperations.TakeUserList().Result;
+        List<User> listusers = users.ToList();
+        User1 = new User("No User", "", "");
+        User2 = new User("No User", "", "");
+        User3 = new User("No User", "", "");
+        User4 = new User("No User", "", "");
+        User5 = new User("No User", "", "");
+
+        Random rnd = new Random();
+
+        if (listusers.Count == 1)
+        {
+            User1 = listusers[0];
+        }
+        if (listusers.Count == 2)
+        {
+            User1 = listusers[0];
+            User2 = listusers[1];
+        }
+        if (listusers.Count == 3)
+        {
+            User1 = listusers[0];
+            User2 = listusers[1];
+            User3 = listusers[2];
+        }
+        if (listusers.Count == 4)
+        {
+            User1 = listusers[0];
+            User2 = listusers[1];
+            User3 = listusers[2];
+            User4 = listusers[3];
+        }
+        if (listusers.Count == 5)
+        {
+            User1 = listusers[0];
+            User2 = listusers[1];
+            User3 = listusers[2];
+            User4 = listusers[3];
+            User5 = listusers[4];
+        }
+        if (listusers.Count > 5)
+        {
+            int a = 0;
+            a = rnd.Next(0, listusers.Count);
+            User1 = listusers[a];
+            while (User1.Id == listusers[a].Id)
+            {
+                a = rnd.Next(0, listusers.Count);
+            }
+            User2 = listusers[a];
+            while (User2.Id == listusers[a].Id || User1.Id == listusers[a].Id)
+            {
+                a = rnd.Next(0, listusers.Count);
+            }
+            User3 = listusers[a];
+            while (User3.Id == listusers[a].Id || User2.Id == listusers[a].Id || User1.Id == listusers[a].Id)
+            {
+                a = rnd.Next(0, listusers.Count);
+            }
+            User4 = listusers[a];
+            while (User4.Id == listusers[a].Id || User3.Id == listusers[a].Id || User2.Id == listusers[a].Id || User1.Id == listusers[a].Id)
+            {
+                a = rnd.Next(0, listusers.Count);
+            }
+            User5 = listusers[a];
+        }
+    }
+    public void CreateTeam()
+    {
+        if(CheckFillTeam())
+            CRUDOperations.AddTeam(new Team(Name, new List<IUser>() { User1,User2,User3, User4, User5}));
+
+    }    
+    public void AddPlayerInTeam()
+    {
+        switch (UserNumber)
+        {
+            case 1: 
+                if(Check())
+                    User1 = CRUDOperations.ChooseUserForTeam;
+                break;
+            case 2: 
+                if(Check())
+                    User2 = CRUDOperations.ChooseUserForTeam;
+                break;
+            case 3: 
+                if(Check())
+                    User3 = CRUDOperations.ChooseUserForTeam;
+                break;
+            case 4: 
+                if(Check())
+                    User4 = CRUDOperations.ChooseUserForTeam;
+                break;
+            case 5: 
+                if(Check())
+                    User5 = CRUDOperations.ChooseUserForTeam;
+                break;
+        }
+        //if(User1.Name == "No User" && Check())
+        //{
+        //    User1 = CRUDOperations.ChooseUserForTeam;
+        //}  
+        //else if(User2.Name == "No User" && Check())
+        //{
+        //    User2 = CRUDOperations.ChooseUserForTeam;
+        //}
+        //else if(User3.Name == "No User" && Check())
+        //{
+        //    User3 = CRUDOperations.ChooseUserForTeam;
+        //}
+        //else if(User4.Name == "No User" && Check())
+        //{
+        //    User4 = CRUDOperations.ChooseUserForTeam;
+        //}
+        //else if(User5.Name == "No User" && Check())
+        //{
+        //    User5 = CRUDOperations.ChooseUserForTeam;
+        //}
+    }
+
+    private bool Check()
+    {
+        var ChoodeUserId = CRUDOperations.ChooseUserForTeam.Id;
+        return User1.Id != ChoodeUserId && User2.Id != ChoodeUserId && User3.Id != ChoodeUserId && User4.Id != ChoodeUserId && User5.Id != ChoodeUserId;
+    }
+
+    private bool CheckFillTeam()
+    {
+        return User1.Name != "No User" && User2.Name != "No User" && User3.Name != "No User" && User4.Name != "No User" && User5.Name != "No User";
+    }
+}

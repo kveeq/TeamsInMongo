@@ -1,0 +1,17 @@
+﻿@using TeamsInMongo.Data
+@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<div class="row">
+    <div class="col col-4">
+        <UserList Users=CRUDOperations.TakeUserList().Result></UserList>
+        <LoginUser></LoginUser>
+    </div>
+    <div class="col col-4" >
+        <TeamCreate></TeamCreate>
+    </div>
+    <div class="col col-4">
+        <TeamList Teams=CRUDOperations.TakeTeamList().Result></TeamList>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+﻿@using TeamsInMongo.Data
+
+<h6>Список команд</h6>
+<div class="col col-4 list-group">
+
+@foreach(var item in Teams)
+{
+    <ListItem Team=item state=false></ListItem>
+}
+</div>
+
+@code {
+    [Parameter]
+    public List<Team> Teams { get; set; }
+
+}
