@@ -1,18 +1,27 @@
 ﻿@page "/counter"
-
+@using TeamsInMongo.Data
+@inject User user
 <PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
+<div class="row">
+    <div class="col col-4">
+        <UserList Users=CRUDOperations.TakeUserList().Result></UserList>
+        <LoginUser></LoginUser>
+    </div>
+    <div class="col col-4" >
+        <TeamCreate></TeamCreate>
+    </div>
+    <div class="col col-4">
+        <TeamList Teams=CRUDOperations.TakeTeamList().Result></TeamList>
+    </div>
+</div>
 
-<p role="status">Current count: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<div class="position-absolute bottom-0 end-0">
+    <label>@user.Name</label>
+    <label>@user.Login</label>
+</div>
 
 @code {
-    private int currentCount = 0;
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
 }

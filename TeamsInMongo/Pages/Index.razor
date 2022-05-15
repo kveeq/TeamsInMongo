@@ -3,15 +3,15 @@
 
 <PageTitle>Index</PageTitle>
 
-<div class="row">
-    <div class="col col-4">
-        <UserList Users=CRUDOperations.TakeUserList().Result></UserList>
-        <LoginUser></LoginUser>
-    </div>
-    <div class="col col-4" >
-        <TeamCreate></TeamCreate>
-    </div>
-    <div class="col col-4">
-        <TeamList Teams=CRUDOperations.TakeTeamList().Result></TeamList>
-    </div>
+<h6 class="mt-5">Регистрация новых пользователей</h6>
+<div class="col col-4">
+    <input type="text" placeholder="Имя" class="border input-group-text mb-2" @bind="Name" />
+    <input type="text" placeholder="Логин" class="border input-group-text mb-2" @bind="Login" />
+    <input type="text" placeholder="Email" class="border input-group-text mb-2" @bind="Email" />
+    <button class="btn btn-outline-success py-2 px-4 mx-5" @onclick="Submit">Создать</button>
+</div>
+
+<div class="position-absolute bottom-0 end-0">
+    <button >@user.Name</button>
+    <button >@user.Login</button>
 </div>

@@ -15,6 +15,7 @@
 
     public void Submit()
     {
-        CRUDOperations.AddUser(new User(Name, Login, Email));
+        if(!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(Login) && !String.IsNullOrWhiteSpace(Email))
+            CRUDOperations.AddUser(new User(Name, Login, Email));
     }
 }
